@@ -1,12 +1,11 @@
 from http import HTTPStatus
 import shutil
 import tempfile
-from urllib import response
 from django.conf import settings
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
-from posts.models import Group, Post, User, Comment
-from posts.forms import PostForm, CommentForm
+from posts.models import Group, Post, User
+from posts.forms import PostForm
 from django.core.files.uploadedfile import SimpleUploadedFile
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -38,16 +37,16 @@ FORM_DATA_3 = {'username': AUTHOR,
                'password2': '1qaz2wsxC'}
 FORM_DATA_4 = {'text': 'Просто тест'}
 SMALL_GIF = (
-            b'\x47\x49\x46\x38\x39\x61\x02\x00'
-            b'\x01\x00\x80\x00\x00\x00\x00\x00'
-            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-            b'\x0A\x00\x3B')
+             b'\x47\x49\x46\x38\x39\x61\x02\x00'
+             b'\x01\x00\x80\x00\x00\x00\x00\x00'
+             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+             b'\x0A\x00\x3B')
 UPLOAD = SimpleUploadedFile(
-            name='small.gif',
-            content=SMALL_GIF,
-            content_type='image/gif')
+             name='small.gif',
+             content=SMALL_GIF,
+             content_type='image/gif')
 FORM_DATA_IMG = {'author': 'Автор',
                  'text': 'Тестовый текст',
                  'image': UPLOAD}
@@ -145,16 +144,13 @@ class FormTests(TestCase):
         response = self.authorized_client.post(
             POST_CR_1,
             data=FORM_DATA_IMG,
-            follow=True
-        )
+            follow=True)
         self.assertRedirects(
             response,
-            PROFILE_USER
-            )
+            PROFILE_USER)
         self.assertEqual(Post.objects.count(), posts_count + 1)
         self.assertTrue(
             Post.objects.filter(
                 text=TEXT_1,
                 image='posts/small.gif'
-            ).exists()
-        )
+            ).exists())

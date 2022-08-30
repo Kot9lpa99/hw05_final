@@ -50,8 +50,8 @@ def profile(request, username):
     following = (request.user != author
                  and request.user.is_authenticated
                  and Follow.objects.filter(
-                    user=request.user,
-                    author=author).exists())
+                     user=request.user,
+                     author=author).exists())
     context = {
         'following': following,
         'page_obj': page_obj,
@@ -72,8 +72,8 @@ def post_detail(request, post_id):
     following = (request.user != username
                  and request.user.is_authenticated
                  and Follow.objects.filter(
-                    user=request.user,
-                    author=username).exists())
+                     user=request.user,
+                     author=username).exists())
     context = {
         'following': following,
         'form': form,
