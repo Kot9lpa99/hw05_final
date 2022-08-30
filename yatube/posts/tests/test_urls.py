@@ -30,8 +30,9 @@ URL_CREATE_POST = '/create/'
 URL_EDIT_POST = f'/posts/{POST_NUM}/edit/'
 URL_SIGNUP = '/auth/signup/'
 URL_LOGIN = '/auth/login/'
-URL_FAKE_PAGE = '/posts/fake_page'
 URL_REDIRECT = f'/auth/login/?next=/posts/{POST_NUM}/edit/'
+URL_FOLLOW = '/follow/'
+
 
 AUTHOR_TEST = {
     URL_INDEX: HTTPStatus.OK,
@@ -42,7 +43,7 @@ AUTHOR_TEST = {
     URL_EDIT_POST: HTTPStatus.OK,
     URL_SIGNUP: HTTPStatus.OK,
     URL_LOGIN: HTTPStatus.OK,
-    URL_FAKE_PAGE: HTTPStatus.NOT_FOUND,
+    URL_FOLLOW: HTTPStatus.OK,
 }
 
 USER_TEST = {
@@ -54,7 +55,7 @@ USER_TEST = {
     URL_EDIT_POST: HTTPStatus.FOUND,
     URL_SIGNUP: HTTPStatus.OK,
     URL_LOGIN: HTTPStatus.OK,
-    URL_FAKE_PAGE: HTTPStatus.NOT_FOUND,
+    URL_FOLLOW: HTTPStatus.OK
 }
 
 GUEST_TEST = {
@@ -66,7 +67,7 @@ GUEST_TEST = {
     URL_EDIT_POST: HTTPStatus.FOUND,
     URL_SIGNUP: HTTPStatus.OK,
     URL_LOGIN: HTTPStatus.OK,
-    URL_FAKE_PAGE: HTTPStatus.NOT_FOUND,
+    URL_FOLLOW: HTTPStatus.FOUND,
 }
 
 URL_ADDRESS = {
@@ -105,7 +106,7 @@ class PostURLTests(TestCase):
         self.authorized_client.force_login(self.user_1)
         self.authorized_client_author.force_login(self.author_1)
 
-    def test_url_quest(self):
+    def test_url_guest(self):
         for page_url, i in GUEST_TEST.items():
             with self.subTest(page_url=page_url):
                 response = self.guest_client.get(page_url)
