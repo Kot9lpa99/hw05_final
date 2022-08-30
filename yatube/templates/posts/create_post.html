@@ -1,0 +1,8 @@
+{% extends 'form_create.html' %}
+  {% block form %}
+    {% if is_edit %}
+      <form method="POST" action="{% url 'posts:post_edit' post_id %}" enctype="multipart/form-data">{% csrf_token %}
+    {% else %}
+      <form method="POST" action="{% url 'posts:post_create' %}" enctype="multipart/form-data">{% csrf_token %}
+    {% endif %}
+  {% endblock form %}
