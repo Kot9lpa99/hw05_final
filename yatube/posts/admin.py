@@ -30,10 +30,10 @@ class GroupAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = (
-       'post',
-       'author',
-       'text',
-       'created'
+        'post',
+        'author',
+        'text',
+        'created'
     )
     search_fields = ('post',)
     list_filter = ('created',)

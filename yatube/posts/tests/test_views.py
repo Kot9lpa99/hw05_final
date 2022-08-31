@@ -207,10 +207,14 @@ class PagesTests(TestCase):
         followers_count = Follow.objects.filter(
             user=self.author_1, author=self.user_1).count()
         self.assertEqual(followers_count, 1)
+        self.authorized_client_author.get(PROFILE)
+        followers_count_1 = Follow.objects.filter(
+            author=self.author_1, user=self.author_1).count()
+        self.assertEqual(followers_count_1, 0)
         self.guest_client.get(PROFILE)
-        followers_count = Follow.objects.filter(
+        followers_count_2 = Follow.objects.filter(
             user=self.user_1, author=self.user_1).count()
-        self.assertEqual(followers_count, 0)
+        self.assertEqual(followers_count_2, 0)
 
     def test_follow_post_exists_in_follow_index(self):
         post = Post.objects.create(text='Проверка подписки',
