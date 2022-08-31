@@ -44,7 +44,6 @@ URL_COMMENT = reverse(
     kwargs={'username': USER}
 )
 
-
 AUTHOR_TEST = {
     URL_INDEX: HTTPStatus.OK,
     URL_GROUP_LIST: HTTPStatus.OK,

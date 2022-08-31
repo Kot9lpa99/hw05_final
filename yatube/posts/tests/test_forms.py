@@ -5,7 +5,7 @@ from django.conf import settings
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from posts.models import Group, Post, User, Comment
-from posts.forms import PostForm, CommentForm
+from posts.forms import PostForm
 from django.core.files.uploadedfile import SimpleUploadedFile
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -184,8 +184,7 @@ class FormTests(TestCase):
         self.assertEqual(comment.author, self.user_1)
 
     def test_add_comment_guest_client(self):
-        posts = Comment.objects.filter(
-        author=self.author).exists()
+        posts = Comment.objects.filter(author=self.author).exists()
         response = self.guest.post(
             ADD_COMMENT,
             data=FORM_DATA_4,
