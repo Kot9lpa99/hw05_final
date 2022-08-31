@@ -57,11 +57,13 @@ class Comment(models.Model):
         Post,
         on_delete=models.CASCADE,
         related_name='comments',
+        verbose_name='Комментарий'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='comments',
+        verbose_name='Автор'
     )
     text = models.TextField(
         verbose_name='Текст комментария',
@@ -69,6 +71,7 @@ class Comment(models.Model):
     )
     created = models.DateTimeField(
         auto_now_add=True,
+        verbose_name='Дата написания комментария'
     )
 
     class Meta():
@@ -96,6 +99,3 @@ class Follow(models.Model):
     class Meta():
         verbose_name = 'Подписчик'
         verbose_name_plural = 'Подписчики'
-
-    def __str__(self):
-        return (self.user, self.author)

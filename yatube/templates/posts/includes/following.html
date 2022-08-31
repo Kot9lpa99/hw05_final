@@ -1,10 +1,10 @@
 {% if following %}
-<a
-  class="btn btn-lg btn-light"
-  href="{% url 'posts:profile_unfollow' author.username %}" role="button"
->
-  Отписаться
-</a>
+  <a
+    class="btn btn-lg btn-light"
+    href="{% url 'posts:profile_unfollow' author.username %}" role="button"
+  >
+    Отписаться
+  </a>
 {% else %}
   <a
     class="btn btn-lg btn-primary"

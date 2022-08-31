@@ -203,30 +203,27 @@ class PagesTests(TestCase):
         self.assertNotEqual(posts_1, posts_2)
 
     def test_user_unsub_and_sub(self):
-        user2 = User.objects.create_user(username='User2')
-        Follow.objects.create(user=self.author_1, author=user2)
+        Follow.objects.create(user=self.author_1, author=self.user_1)
         followers_count = Follow.objects.filter(
-            user=self.author_1, author=user2).count()
+            user=self.author_1, author=self.user_1).count()
         self.assertEqual(followers_count, 1)
         self.guest_client.get(PROFILE)
         followers_count = Follow.objects.filter(
-            user=self.user_1, author=user2).count()
+            user=self.user_1, author=self.user_1).count()
         self.assertEqual(followers_count, 0)
 
     def test_follow_post_exists_in_follow_index(self):
-        user2 = User.objects.create_user(username='User2')
-        post = Post.objects.create(text='Проверка подписки', author=user2)
-        Follow.objects.create(user=self.author_1, author=user2)
+        post = Post.objects.create(text='Проверка подписки',
+                                   author=self.user_1)
+        Follow.objects.create(user=self.author_1, author=self.user_1)
         response = self.authorized_client_author.get(FOLLOW)
         post_text1 = response.context['page_obj'][0].text
         self.assertEqual(post.text, post_text1)
 
     def test_unfollow_post_does_not_exists_in_follow_index(self):
-        user2 = User.objects.create_user(username='User2')
-        post = Post.objects.create(text='Проверка подписки', author=user2)
-        test_client = Client()
-        test_client.force_login(user2)
-        Follow.objects.create(user=user2, author=self.author_1)
-        response = test_client.get(FOLLOW)
+        post = Post.objects.create(text='Проверка подписки',
+                                   author=self.user_1)
+        Follow.objects.create(user=self.user_1, author=self.author_1)
+        response = self.authorized_client.get(FOLLOW)
         post_text1 = response.context['page_obj'][0].text
         self.assertNotEqual(post.text, post_text1)

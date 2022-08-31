@@ -4,8 +4,8 @@ import tempfile
 from django.conf import settings
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
-from posts.models import Group, Post, User
-from posts.forms import PostForm
+from posts.models import Group, Post, User, Comment
+from posts.forms import PostForm, CommentForm
 from django.core.files.uploadedfile import SimpleUploadedFile
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -15,8 +15,10 @@ AUTHOR = 'author_1'
 TEXT = 'text'
 TEXT_1 = 'Тестовый текст'
 TEXT_2 = 'text_2'
+TEXT_3 = 'Тест'
 TITLE = 'Тестовая группа'
 DESCRIPTION = 'Тестовое описание'
+POST_NUM = '1'
 
 INDEX_NAME = 'posts:index'
 PROFILE_NAME = 'posts:profile'
@@ -25,11 +27,14 @@ POST_ED = 'posts:post_edit'
 POST_CR = 'posts:post_create'
 SIGNUP_NAME = 'users:signup'
 LOGIN_NAME = 'users:login'
+A_COMMENT = 'posts:add_comment'
 PROFILE_USER = reverse(PROFILE_NAME, kwargs={'username': AUTHOR})
 LOGIN_1 = reverse(LOGIN_NAME)
 POST_CR_1 = reverse(POST_CR)
+ADD_COMMENT = reverse(A_COMMENT, kwargs={'post_id': POST_NUM})
 TARGET_URL = f'{LOGIN_1}?next={POST_CR_1}'
 TARGET_URL_1 = f'{LOGIN_1}?next={PROFILE_USER}'
+TARGET_URL_2 = f'{LOGIN_1}?next={ADD_COMMENT}'
 FORM_DATA_1 = {'text': 'Тест'}
 FORM_DATA_2 = {'text': TEXT_2}
 FORM_DATA_3 = {'username': AUTHOR,
@@ -67,6 +72,10 @@ class FormTests(TestCase):
                                        text=TEXT_1,
                                        group=cls.group)
         cls.form = PostForm()
+        cls.comment = Comment.objects.create(
+            post=cls.post,
+            author=cls.user_1,
+            text=TEXT_1)
 
     @classmethod
     def tearDownClass(cls):
@@ -100,7 +109,7 @@ class FormTests(TestCase):
     def test_form_create_guests(self):
         response = self.guest.post(
             reverse(POST_CR),
-            data=FORM_DATA_4,
+            data=FORM_DATA_IMG,
             follow=True
         )
         post_exist = Post.objects.filter(author=self.user_1
@@ -154,3 +163,36 @@ class FormTests(TestCase):
                 text=TEXT_1,
                 image='posts/small.gif'
             ).exists())
+
+    def test_add_comment_authorized_client(self):
+        comments_1 = Comment.objects.count()
+        response = self.authorized_client.post(
+            ADD_COMMENT,
+            data=FORM_DATA_1,
+            follow=True
+        )
+        comment = Comment.objects.first()
+        self.assertRedirects(
+            response,
+            self.detail
+        )
+        self.assertEqual(Comment.objects.count(), comments_1 + 1)
+        self.assertTrue(
+            Comment.objects.filter(
+                text=TEXT_1
+            ).exists())
+        self.assertEqual(comment.author, self.user_1)
+
+    def test_add_comment_guest_client(self):
+        posts = Comment.objects.filter(
+        author=self.author).exists()
+        response = self.guest.post(
+            ADD_COMMENT,
+            data=FORM_DATA_4,
+        )
+        self.assertRedirects(response,
+                             TARGET_URL_2,
+                             status_code=HTTPStatus.FOUND,
+                             target_status_code=HTTPStatus.OK,
+                             msg_prefix='')
+        self.assertEqual(posts, False)

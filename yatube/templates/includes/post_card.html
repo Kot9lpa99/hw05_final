@@ -1,25 +1,22 @@
 {% load thumbnail %}
 <main>
   <ul>
-  {% if post.author.get_full_name%}
-    <li>Автор: {{ post.author.get_full_name }} <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a></li>
-  {% elif  post.author.username%}
-    <li>Автор: {{ post.author.username }} <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a></li>
-  {% endif%}
-    <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
+    {% if post.author.get_full_name%}
+      <li>Автор: {{ post.author.get_full_name }} <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a></li>
+    {% elif  post.author.username%}
+      <li>Автор: {{ post.author.username }} <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a></li>
+    {% endif%}
+      <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
   </ul>
   <article class="col-12 col-md-9">
-  {% thumbnail post.image "200x200" crop="center" upscale=True as im %}
-    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-  {% endthumbnail %}
+    {% thumbnail post.image "200x200" crop="center" upscale=True as im %}
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+    {% endthumbnail %}
   </article>
   <p>{{ post.text }}</p>
-  {% if post.group %}
-    <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
-  {% endif %}
-  <p>
-  <a href="{% url 'posts:post_detail' post.pk %}">подробная информация</a>
-  {% if not forloop.last %}
-    <hr />
-  {% endif %}
+    {% if post.group %}
+      <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+    {% endif %}
+  <p><a href="{% url 'posts:post_detail' post.pk %}">подробная информация</a></p>
+  {% if not forloop.last %}<hr />{% endif %}
 </main>

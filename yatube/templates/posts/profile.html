@@ -1,22 +1,22 @@
-  {% extends 'base.html' %}
-  {% block title%}
-    {% if title %}
-      Профайл пользователя: {{ title }}
-    {% elif  title_1 %}
-      Профайл пользователя: {{ title_1 }}
-    {% endif%}
-  {% endblock %}
-  {% block content %}
-    {% if title %}
-      <h1>Все посты пользователя: {{ title }}</h1>
-      <h3>Всего постов: {{ post_count }}</h3>
-    {% elif title_1 %}
-      <h1>Все посты пользователя: {{ title_1 }}</h1>
-      <h3>Всего постов: {{ post_count }}</h3>
-    {% endif %}
-    {% include 'posts/includes/following.html' %}
-  {% for post in page_obj %} 
-  {% include 'includes/post_card.html' %}
-  {% endfor %}
-  {% include 'posts/includes/paginator.html' %}
-  {% endblock content %}
+{% extends 'base.html' %}
+{% block title%}
+  {% if title %}
+    Профайл пользователя: {{ title }}
+  {% elif  title_1 %}
+    Профайл пользователя: {{ title_1 }}
+  {% endif%}
+{% endblock %}
+{% block content %}
+  {% if title %}
+    <h1>Все посты пользователя: {{ title }}</h1>
+    <h3>Всего постов: {{ post_count }}</h3>
+  {% elif title_1 %}
+    <h1>Все посты пользователя: {{ title_1 }}</h1>
+    <h3>Всего постов: {{ post_count }}</h3>
+  {% endif %}
+  {% include 'posts/includes/following.html' %}
+{% for post in page_obj %} 
+{% include 'includes/post_card.html' %}
+{% endfor %}
+{% include 'posts/includes/paginator.html' %}
+{% endblock content %}

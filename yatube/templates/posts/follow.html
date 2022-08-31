@@ -6,11 +6,11 @@
 {% endblock %}
 {% block content %}
   <h1>Сообщение автора на которого вы подписаны</h1>
-  {% cache 20 index %}
-  {% for post in page_obj %}
-    {% include 'includes/post_card.html' %}
-  {% endfor %}
-  {% if not forloop.last %}<hr>{% endif %}
-  {% endcache %}
+{% cache 20 index %}
+{% for post in page_obj %}
+  {% include 'includes/post_card.html' %}
+{% endfor %}
+{% if not forloop.last %}<hr>{% endif %}
+{% endcache %}
   {% include 'posts/includes/paginator.html' %}
 {% endblock %}

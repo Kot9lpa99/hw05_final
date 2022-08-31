@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from django.test import Client, TestCase
 from posts.models import Group, Post, User
+from django.urls import reverse
 
 URLS = {
     'index_1': 'posts/index.html',
@@ -12,6 +13,7 @@ URLS = {
     'login_1': 'users/login.html',
     'author_1': 'about/author.html',
     'tech_1': 'about/tech.html',
+    'follow': 'posts/follow.html'
 }
 
 SLUG_1 = 'test-slug'
@@ -30,8 +32,17 @@ URL_CREATE_POST = '/create/'
 URL_EDIT_POST = f'/posts/{POST_NUM}/edit/'
 URL_SIGNUP = '/auth/signup/'
 URL_LOGIN = '/auth/login/'
+URL_FAKE_PAGE = '/posts/fake_page'
 URL_REDIRECT = f'/auth/login/?next=/posts/{POST_NUM}/edit/'
 URL_FOLLOW = '/follow/'
+URL_UNFOLLOW = reverse(
+    'posts:profile_unfollow',
+    kwargs={'username': USER}
+)
+URL_COMMENT = reverse(
+    'posts:profile_unfollow',
+    kwargs={'username': USER}
+)
 
 
 AUTHOR_TEST = {
@@ -43,7 +54,10 @@ AUTHOR_TEST = {
     URL_EDIT_POST: HTTPStatus.OK,
     URL_SIGNUP: HTTPStatus.OK,
     URL_LOGIN: HTTPStatus.OK,
+    URL_FAKE_PAGE: HTTPStatus.NOT_FOUND,
     URL_FOLLOW: HTTPStatus.OK,
+    URL_UNFOLLOW: HTTPStatus.FOUND,
+    URL_COMMENT: HTTPStatus.FOUND,
 }
 
 USER_TEST = {
@@ -55,7 +69,10 @@ USER_TEST = {
     URL_EDIT_POST: HTTPStatus.FOUND,
     URL_SIGNUP: HTTPStatus.OK,
     URL_LOGIN: HTTPStatus.OK,
-    URL_FOLLOW: HTTPStatus.OK
+    URL_FAKE_PAGE: HTTPStatus.NOT_FOUND,
+    URL_FOLLOW: HTTPStatus.OK,
+    URL_UNFOLLOW: HTTPStatus.FOUND,
+    URL_COMMENT: HTTPStatus.FOUND,
 }
 
 GUEST_TEST = {
@@ -67,7 +84,10 @@ GUEST_TEST = {
     URL_EDIT_POST: HTTPStatus.FOUND,
     URL_SIGNUP: HTTPStatus.OK,
     URL_LOGIN: HTTPStatus.OK,
+    URL_FAKE_PAGE: HTTPStatus.NOT_FOUND,
     URL_FOLLOW: HTTPStatus.FOUND,
+    URL_UNFOLLOW: HTTPStatus.FOUND,
+    URL_COMMENT: HTTPStatus.FOUND,
 }
 
 URL_ADDRESS = {
