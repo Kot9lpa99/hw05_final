@@ -52,7 +52,7 @@ class PostModelTest(TestCase):
         expected_object_name = self.comment.text[:PYATNADCAT]
         self.assertEqual(expected_object_name, str(test_comment))
 
-    def test_follow_str(self):
-        self.assertEqual(
-            f'{self.follow.user} подписался на {self.follow.author}',
-            str(self.follow))
+    def test_model_follow(self): 
+        self.assertTrue(Follow.objects.filter( 
+            user=self.user, 
+            author=self.user_2).exists()) 
