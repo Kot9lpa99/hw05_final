@@ -5,11 +5,12 @@ from .models import Follow, Post, Group, User
 from .forms import CommentForm, PostForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 
 
 SORT_TEN: int = 10
 
-
+@cache_page(20)
 def index(request):
     posts = Post.objects.select_related('group')
     paginator = Paginator(posts, SORT_TEN)

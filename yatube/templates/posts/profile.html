@@ -15,8 +15,8 @@
     <h3>Всего постов: {{ post_count }}</h3>
   {% endif %}
   {% include 'posts/includes/following.html' %}
-{% for post in page_obj %} 
-{% include 'includes/post_card.html' %}
-{% endfor %}
-{% include 'posts/includes/paginator.html' %}
+  {% for post in page_obj %} 
+    {% include 'includes/post_card.html' %}
+  {% endfor %}
+  {% include 'posts/includes/paginator.html' %}
 {% endblock content %}
