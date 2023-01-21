@@ -25,6 +25,7 @@ PAGE: int = 10
 PAGE_TWO = '?page=2'
 SEIS: int = 6
 
+CREATE_POST = 'posts/create_post.html'
 INDEX = reverse('posts:index')
 GR_LIST = reverse('posts:group_list', kwargs={'slug': SLUG_1})
 CR_POST = reverse('posts:post_create')
@@ -39,6 +40,7 @@ PAGES_NAME = {
     'posts/create_post.html': CR_POST,
     'posts/post_detail.html': POST_DL,
     'posts/profile.html': PROFILE,
+    'posts/create_post.html': POST_EDIT,
 }
 PRIVATE_PAGES_ONLY_USERS = {
     CR_POST: '/auth/login/?next=/create/',
@@ -76,7 +78,6 @@ class PagesTests(TestCase):
             slug=SLUG_1,
         )
         cls.post = Post.objects.create(
-            id='1',
             author=cls.author_1,
             text=TEXT1,
             group=cls.group,
@@ -90,7 +91,7 @@ class PagesTests(TestCase):
                 group=cls.group,
                 image=UPLOAD
             )
-
+    
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
@@ -107,9 +108,18 @@ class PagesTests(TestCase):
     def test_pages_uses_correct_template_authorized_client(self):
         for template, reverse_name in PAGES_NAME.items():
             with self.subTest(reverse_name=reverse_name):
-                response = self.authorized_client.get(reverse_name)
+                response = self.authorized_client_author.get(reverse_name)
                 self.assertTemplateUsed(response, template)
+        response = self.authorized_client.get(POST_EDIT)
+        self.assertTemplateUsed(response, CREATE_POST)
 
+    def test_pages_uses_correct_template_authorized_client1(self):
+        temp = {'posts/create_post.html': POST_EDIT}
+        for template, reverse_name in temp.items():
+            with self.subTest(reverse_name=reverse_name):
+                response = self.authorized_client_author.get(reverse_name)
+                self.assertTemplateUsed(response, template)
+    
     def test_pages_uses_correct_template_anonymous(self):
         for reverse_name, template in PRIVATE_PAGES_ONLY_USERS.items():
             with self.subTest(reverse_name=reverse_name):
