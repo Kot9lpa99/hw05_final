@@ -49,4 +49,4 @@ python yatube/manage.py createsuperuser
 python3 manage.py runserver
 ```
 ### Автор
-- Егор
+- Дубихин Егор
