@@ -61,4 +61,4 @@ python yatube/manage.py createsuperuser
 python3 manage.py runserver
 ```
 ### Автор
-- Дубихин Егор
+##### [Дубихин Егор](https://github.com/Kot9lpa99)
